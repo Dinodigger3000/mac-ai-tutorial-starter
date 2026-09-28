@@ -6,7 +6,17 @@ You don't need an idea yet. Claude will help you find one.
 
 ## My project
 
-Nothing yet! Claude will help you describe your project here.
+A Connect Four game that runs in your browser.
+You play red. The computer plays yellow.
+Click a column to drop a piece. Get four in a row to win.
+
+To play, open `index.html` in a browser.
+
+Files:
+
+- `index.html`: the page.
+- `style.css`: how the board looks.
+- `game.js`: the game code.
 
 ## Before you start
 
