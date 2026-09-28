@@ -9,6 +9,8 @@ const newGameBtn = document.getElementById("new-game");
 
 let board;   // board[row][col] is null, "red" or "yellow". Row 0 is the top.
 let current; // whose turn it is
+let gameOver;
+let message; // text shown when the game ends
 
 function newGame() {
   board = [];
@@ -16,6 +18,8 @@ function newGame() {
     board.push(new Array(COLS).fill(null));
   }
   current = "red";
+  message = null;
+  gameOver = false;
 }
 
 // Drop a piece in a column. Returns the row it landed in, or -1 if the column is full.
@@ -27,6 +31,30 @@ function dropPiece(col, color) {
     }
   }
   return -1;
+}
+
+// Is there four in a row that includes the piece at (row, col)?
+function checkWin(row, col) {
+  const color = board[row][col];
+  const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+  for (const [dr, dc] of directions) {
+    let count = 1;
+    for (const sign of [1, -1]) {
+      let r = row + dr * sign;
+      let c = col + dc * sign;
+      while (r >= 0 && r < ROWS && c >= 0 && c < COLS && board[r][c] === color) {
+        count++;
+        r += dr * sign;
+        c += dc * sign;
+      }
+    }
+    if (count >= 4) return true;
+  }
+  return false;
+}
+
+function isBoardFull() {
+  return board[0].every(cell => cell !== null);
 }
 
 // --- Drawing ---
@@ -41,12 +69,22 @@ function drawBoard() {
       boardEl.appendChild(cell);
     }
   }
-  statusEl.textContent = "Turn: " + current;
+  statusEl.textContent = message || "Turn: " + current;
 }
 
 function handleClick(col) {
-  if (dropPiece(col, current) === -1) return; // column is full
-  current = current === "red" ? "yellow" : "red";
+  if (gameOver) return;
+  const row = dropPiece(col, current);
+  if (row === -1) return; // column is full
+  if (checkWin(row, col)) {
+    message = current + " wins!";
+    gameOver = true;
+  } else if (isBoardFull()) {
+    message = "It's a draw!";
+    gameOver = true;
+  } else {
+    current = current === "red" ? "yellow" : "red";
+  }
   drawBoard();
 }
 
