@@ -6,17 +6,21 @@ You don't need an idea yet. Claude will help you find one.
 
 ## My project
 
-A Connect Four game that runs in your browser.
-You play red. The computer plays yellow.
-Click a column to drop a piece. Get four in a row to win.
+Playroom is an installable offline game collection. It starts with Connect Four
+and has a shared theme manager, local scores, save/resume support, and a
+service worker for offline launches. More games can be added to the registry
+in `app.js`.
 
-To play, open `index.html` in a browser.
+To play, serve this folder over HTTPS (or use a local development server) and
+open `index.html` in a browser. Service workers do not run from `file://`.
 
 Files:
 
-- `index.html`: the page.
-- `style.css`: how the board looks.
-- `game.js`: the game code.
+- `index.html`: the app shell and settings dialog.
+- `style.css`: shared responsive styles and theme tokens.
+- `app.js`: game registry, routing, theme manager, and storage wrapper.
+- `games/connect-four.js`: the first lazy-loaded game.
+- `manifest.webmanifest`, `sw.js`, and `icon.svg`: PWA installation and offline support.
 
 ## Before you start
 

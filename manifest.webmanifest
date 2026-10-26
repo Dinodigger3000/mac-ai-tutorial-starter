@@ -1,0 +1,10 @@
+{
+  "name": "Playroom Offline Game Collection",
+  "short_name": "Playroom",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f1f5f9",
+  "theme_color": "#0f172a",
+  "description": "A collection of games that works offline.",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
