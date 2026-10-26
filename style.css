@@ -55,6 +55,18 @@ h1, h2, p { margin-top: 0; }
 .cell.red { background: #ef4444; }
 .cell.yellow { background: #facc15; }
 .cell.win { outline: 4px solid var(--cell-highlight); outline-offset: -4px; }
+.game-stat { background: var(--surface-muted); border-radius: .5rem; color: var(--text-muted); padding: .55rem .8rem; }
+.game-stat strong { color: var(--text); display: inline-block; margin-left: .25rem; }
+.game-status { color: var(--accent); font-weight: 700; min-height: 1.5rem; }
+.tile-board { background: var(--surface-muted); border-radius: .75rem; display: grid; gap: .5rem; grid-template-columns: repeat(4, 1fr); margin: 0 auto; max-width: 28rem; padding: .5rem; touch-action: manipulation; }
+.tile { align-items: center; aspect-ratio: 1; background: var(--surface); border-radius: .4rem; display: flex; font-size: clamp(1.25rem, 7vw, 2rem); font-weight: 800; justify-content: center; }
+.tile-empty { color: transparent; }
+.tile-2 { background: var(--board-light); }
+.tile-4 { background: var(--board-dark); }
+.tile-8, .tile-16, .tile-32, .tile-64 { background: var(--accent); color: var(--accent-contrast); }
+.tile-128, .tile-256, .tile-512, .tile-1024, .tile-2048 { background: var(--cell-highlight); color: var(--text); }
+.move-buttons { display: flex; gap: .5rem; justify-content: center; margin-top: 1rem; }
+.move-buttons .text-button { font-size: 1.5rem; min-width: 3rem; }
 .toast { background: var(--text); border-radius: .5rem; bottom: 1.25rem; color: var(--bg); left: 50%; opacity: 0; padding: .75rem 1rem; position: fixed; transform: translate(-50%, 1rem); transition: opacity .2s, transform .2s; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 dialog { background: var(--surface); border: 1px solid var(--border); border-radius: .75rem; color: var(--text); max-width: 24rem; width: calc(100% - 2rem); }

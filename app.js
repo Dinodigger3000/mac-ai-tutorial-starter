@@ -17,7 +17,10 @@ const storage = {
 
 const root = document.documentElement;
 const app = document.querySelector("#app");
-const games = [{ id: "connect-four", name: "Connect Four", icon: "🔴", category: "Board", description: "Drop four in a row before the computer does.", load: () => import("./games/connect-four.js") }];
+const games = [
+  { id: "connect-four", name: "Connect Four", icon: "🔴", category: "Board", description: "Drop four in a row before the computer does.", load: () => import("./games/connect-four.js") },
+  { id: "2048", name: "2048", icon: "🔢", category: "Puzzle", description: "Combine matching tiles and reach 2048.", load: () => import("./games/2048.js") }
+];
 
 function applyTheme(theme = storage.get("theme", { theme: "ocean", mode: "system" })) {
   root.dataset.theme = theme.theme;
@@ -56,7 +59,10 @@ document.querySelector("#back-button").addEventListener("click", () => { history
 document.querySelector("#theme-button").addEventListener("click", openSettings);
 document.querySelector("#theme-select").addEventListener("change", event => applyTheme({ theme: event.target.value, mode: document.querySelector("#mode-select").value }));
 document.querySelector("#mode-select").addEventListener("change", event => applyTheme({ theme: document.querySelector("#theme-select").value, mode: event.target.value }));
-document.querySelector("#reset-button").addEventListener("click", () => { storage.remove("scores:connect-four"); storage.remove("save:connect-four"); showToast("Saved game data reset"); });
+document.querySelector("#reset-button").addEventListener("click", () => {
+  games.forEach(game => { storage.remove(`scores:${game.id}`); storage.remove(`save:${game.id}`); });
+  showToast("Saved game data reset");
+});
 window.addEventListener("popstate", () => location.hash === "#/" || !location.hash ? renderHome() : openGame(location.hash.slice(2)));
 applyTheme();
 renderHome();

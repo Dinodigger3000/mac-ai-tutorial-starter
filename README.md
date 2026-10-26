@@ -6,7 +6,7 @@ You don't need an idea yet. Claude will help you find one.
 
 ## My project
 
-Playroom is an installable offline game collection. It starts with Connect Four
+Playroom is an installable offline game collection with Connect Four and 2048
 and has a shared theme manager, local scores, save/resume support, and a
 service worker for offline launches. Connect Four keeps persistent wins,
 losses, draws, and games played. More games can be added to the registry
@@ -20,7 +20,8 @@ Files:
 - `index.html`: the app shell and settings dialog.
 - `style.css`: shared responsive styles and theme tokens.
 - `app.js`: game registry, routing, theme manager, and storage wrapper.
-- `games/connect-four.js`: the first lazy-loaded game.
+- `games/connect-four.js`: the Connect Four game.
+- `games/2048.js`: the 2048 puzzle with keyboard and button controls.
 - `manifest.webmanifest`, `sw.js`, and `icon.svg`: PWA installation and offline support.
 
 ## Before you start
