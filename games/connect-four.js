@@ -13,11 +13,11 @@ export function start(container, api) {
   function drawScore() {
     scoreElement.textContent = `Wins: ${scores.wins} · Losses: ${scores.losses} · Draws: ${scores.draws} · Games: ${scores.plays}`;
   }
-  function draw() {
+  function draw(animatedIndex = -1) {
     boardElement.innerHTML = "";
     board.forEach((piece, index) => {
       const cell = document.createElement("button");
-      cell.className = `cell ${piece || ""}`;
+      cell.className = `cell ${piece || ""}${index === animatedIndex ? " new-piece" : ""}`;
       cell.dataset.column = index % COLS;
       cell.ariaLabel = `Row ${Math.floor(index / COLS) + 1}, column ${(index % COLS) + 1}${piece ? `, ${piece}` : ""}`;
       cell.addEventListener("click", () => move(Number(cell.dataset.column)));
@@ -70,7 +70,7 @@ export function start(container, api) {
     if (gameOver || turn !== "red") return;
     const index = drop(column, "red");
     if (index < 0) return;
-    draw();
+    draw(index);
     const line = winningLine(index);
     if (line.length) return finish("red", line);
     if (board.every(Boolean)) return finishDraw();
@@ -78,7 +78,7 @@ export function start(container, api) {
     setTimeout(() => {
       const choices = [...Array(COLS).keys()].filter(col => !board[col]);
       const computerIndex = drop(choices[Math.floor(Math.random() * choices.length)] ?? 3, "yellow");
-      draw();
+      draw(computerIndex);
       const computerLine = winningLine(computerIndex);
       if (computerLine.length) return finish("yellow", computerLine);
       if (board.every(Boolean)) return finishDraw();

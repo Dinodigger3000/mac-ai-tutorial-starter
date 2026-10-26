@@ -1,4 +1,4 @@
-const CACHE = "playroom-v4";
+const CACHE = "playroom-v5";
 const ASSETS = ["./", "./index.html", "./style.css", "./app.js", "./games/connect-four.js", "./games/2048.js", "./manifest.webmanifest", "./icon.svg"];
 self.addEventListener("install", event => event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting())));
 self.addEventListener("activate", event => event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))).then(() => self.clients.claim())));
