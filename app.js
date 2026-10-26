@@ -60,4 +60,11 @@ document.querySelector("#reset-button").addEventListener("click", () => { storag
 window.addEventListener("popstate", () => location.hash === "#/" || !location.hash ? renderHome() : openGame(location.hash.slice(2)));
 applyTheme();
 renderHome();
-if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => showToast("Offline mode is unavailable")));
+if ("serviceWorker" in navigator) window.addEventListener("load", async () => {
+  try {
+    const registration = await navigator.serviceWorker.register("./sw.js");
+    await registration.update();
+  } catch (_) {
+    showToast("Offline mode is unavailable");
+  }
+});
