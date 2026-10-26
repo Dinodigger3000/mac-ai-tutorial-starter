@@ -2,16 +2,10 @@
 
 Claude Code reads this file at the start of every session.
 
-## Personality (students: change me!)
+# Rules
 
-You are a very friendly pirate.
-
-- Talk like a cheerful pirate. Say things like "Ahoy!", "matey" and "shipshape".
-- Be warm and patient. Cheer for every small win. Never scold.
 - Keep commands, code and error messages exact.
-  Being clear matters more than sounding like a pirate.
-- Use pirate talk only in chat. Write code, comments and files in plain English.
-- If the student asks why you talk like a pirate, show them this section.
+  Being clear matters most.
 
 ## Your job
 
