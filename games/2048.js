@@ -8,8 +8,9 @@ export function start(container, api) {
   let best = api.storage.get("scores:2048", { best: 0 }).best;
   let gameOver = false;
   let won = false;
+  let swipeStart = null;
 
-  container.innerHTML = `<section class="game-view game-2048"><h1>2048</h1><p class="muted">Use the arrow keys or buttons to combine matching tiles.</p><div class="game-toolbar"><span class="game-stat">Score <strong id="score">0</strong></span><span class="game-stat">Best <strong id="best">0</strong></span><button class="primary-button" id="new-game">New game</button></div><p id="status" class="game-status" aria-live="polite"></p><div class="tile-board" aria-label="2048 board"></div><div class="move-buttons" aria-label="Move controls"><button class="text-button" data-direction="up">↑</button><button class="text-button" data-direction="left">←</button><button class="text-button" data-direction="down">↓</button><button class="text-button" data-direction="right">→</button></div></section>`;
+  container.innerHTML = `<section class="game-view game-2048"><h1>2048</h1><p class="muted">Use the arrow keys, swipe the board, or use the buttons to combine matching tiles.</p><div class="game-toolbar"><span class="game-stat">Score <strong id="score">0</strong></span><span class="game-stat">Best <strong id="best">0</strong></span><button class="primary-button" id="new-game">New game</button></div><p id="status" class="game-status" aria-live="polite"></p><div class="tile-board" aria-label="2048 board. Swipe to move tiles." tabindex="0"></div><div class="move-buttons" aria-label="Move controls"><button class="text-button" data-direction="up">↑</button><button class="text-button" data-direction="left">←</button><button class="text-button" data-direction="down">↓</button><button class="text-button" data-direction="right">→</button></div></section>`;
   const boardElement = container.querySelector(".tile-board");
   const scoreElement = container.querySelector("#score");
   const bestElement = container.querySelector("#best");
@@ -120,9 +121,30 @@ export function start(container, api) {
     event.preventDefault();
     move(directions[event.key]);
   }
+  function handlePointerDown(event) {
+    swipeStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
+    boardElement.setPointerCapture(event.pointerId);
+  }
+  function handlePointerUp(event) {
+    if (!swipeStart || event.pointerId !== swipeStart.id) return;
+    const deltaX = event.clientX - swipeStart.x;
+    const deltaY = event.clientY - swipeStart.y;
+    swipeStart = null;
+    if (Math.max(Math.abs(deltaX), Math.abs(deltaY)) < 30) return;
+    const direction = Math.abs(deltaX) > Math.abs(deltaY)
+      ? (deltaX > 0 ? "right" : "left")
+      : (deltaY > 0 ? "down" : "up");
+    move(direction);
+  }
+  function handlePointerCancel() {
+    swipeStart = null;
+  }
   container.querySelector("#new-game").addEventListener("click", newGame);
   container.querySelectorAll("[data-direction]").forEach(button => button.addEventListener("click", () => move(button.dataset.direction)));
   container.addEventListener("keydown", handleKey);
+  boardElement.addEventListener("pointerdown", handlePointerDown);
+  boardElement.addEventListener("pointerup", handlePointerUp);
+  boardElement.addEventListener("pointercancel", handlePointerCancel);
   container.tabIndex = 0;
   if (!saved?.board) newGame(); else draw();
 }

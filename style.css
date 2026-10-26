@@ -58,7 +58,7 @@ h1, h2, p { margin-top: 0; }
 .game-stat { background: var(--surface-muted); border-radius: .5rem; color: var(--text-muted); padding: .55rem .8rem; }
 .game-stat strong { color: var(--text); display: inline-block; margin-left: .25rem; }
 .game-status { color: var(--accent); font-weight: 700; min-height: 1.5rem; }
-.tile-board { background: var(--surface-muted); border-radius: .75rem; display: grid; gap: .5rem; grid-template-columns: repeat(4, 1fr); margin: 0 auto; max-width: 28rem; padding: .5rem; touch-action: manipulation; }
+.tile-board { background: var(--surface-muted); border-radius: .75rem; display: grid; gap: .5rem; grid-template-columns: repeat(4, 1fr); margin: 0 auto; max-width: 28rem; padding: .5rem; touch-action: none; user-select: none; }
 .tile { align-items: center; aspect-ratio: 1; background: var(--surface); border-radius: .4rem; display: flex; font-size: clamp(1.25rem, 7vw, 2rem); font-weight: 800; justify-content: center; }
 .tile-empty { color: transparent; }
 .tile-2 { background: var(--board-light); }
