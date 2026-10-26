@@ -5,10 +5,14 @@ export function start(container, api) {
   let board = api.storage.get("save:connect-four", Array(ROWS * COLS).fill(null));
   let turn = "red";
   let gameOver = false;
-  const scores = api.storage.get("scores:connect-four", { wins: 0, losses: 0, plays: 0 });
-  container.innerHTML = `<section class="game-view"><h1>Connect Four</h1><p class="score">Wins: ${scores.wins} · Losses: ${scores.losses} · Plays: ${scores.plays}</p><div class="game-toolbar"><button class="primary-button" id="new-game">New game</button><span id="status" class="muted">Your turn</span></div><div class="board" aria-label="Connect Four board"></div></section>`;
+  let scores = { wins: 0, losses: 0, draws: 0, plays: 0, ...api.storage.get("scores:connect-four", {}) };
+  container.innerHTML = `<section class="game-view"><h1>Connect Four</h1><p id="score" class="score"></p><div class="game-toolbar"><button class="primary-button" id="new-game">New game</button><span id="status" class="muted">Your turn</span></div><div class="board" aria-label="Connect Four board"></div></section>`;
   const boardElement = container.querySelector(".board");
+  const scoreElement = container.querySelector("#score");
   const status = container.querySelector("#status");
+  function drawScore() {
+    scoreElement.textContent = `Wins: ${scores.wins} · Losses: ${scores.losses} · Draws: ${scores.draws} · Games: ${scores.plays}`;
+  }
   function draw() {
     boardElement.innerHTML = "";
     board.forEach((piece, index) => {
@@ -45,11 +49,21 @@ export function start(container, api) {
   }
   function finish(piece, line) {
     gameOver = true;
-    const nextScores = { ...scores, plays: scores.plays + 1 };
-    if (piece === "red") { nextScores.wins++; status.textContent = "You win!"; api.showToast("Four in a row!"); }
-    else { nextScores.losses++; status.textContent = "The computer wins."; }
-    api.storage.set("scores:connect-four", nextScores);
+    scores.plays++;
+    if (piece === "red") { scores.wins++; status.textContent = "You win!"; api.showToast("Four in a row!"); }
+    else { scores.losses++; status.textContent = "The computer wins."; }
+    api.storage.set("scores:connect-four", scores);
+    drawScore();
     line.forEach(index => boardElement.children[index].classList.add("win"));
+    api.storage.remove("save:connect-four");
+  }
+  function finishDraw() {
+    gameOver = true;
+    scores.draws++;
+    scores.plays++;
+    status.textContent = "Draw game.";
+    api.storage.set("scores:connect-four", scores);
+    drawScore();
     api.storage.remove("save:connect-four");
   }
   function move(column) {
@@ -59,7 +73,7 @@ export function start(container, api) {
     draw();
     const line = winningLine(index);
     if (line.length) return finish("red", line);
-    if (board.every(Boolean)) { gameOver = true; status.textContent = "Draw game."; return; }
+    if (board.every(Boolean)) return finishDraw();
     turn = "yellow"; status.textContent = "Computer is thinking…";
     setTimeout(() => {
       const choices = [...Array(COLS).keys()].filter(col => !board[col]);
@@ -67,10 +81,11 @@ export function start(container, api) {
       draw();
       const computerLine = winningLine(computerIndex);
       if (computerLine.length) return finish("yellow", computerLine);
-      if (board.every(Boolean)) { gameOver = true; status.textContent = "Draw game."; return; }
+      if (board.every(Boolean)) return finishDraw();
       turn = "red"; status.textContent = "Your turn"; api.storage.set("save:connect-four", board);
     }, 350);
   }
   container.querySelector("#new-game").addEventListener("click", () => { board = Array(ROWS * COLS).fill(null); turn = "red"; gameOver = false; status.textContent = "Your turn"; api.storage.remove("save:connect-four"); draw(); });
+  drawScore();
   draw();
 }

@@ -8,7 +8,8 @@ You don't need an idea yet. Claude will help you find one.
 
 Playroom is an installable offline game collection. It starts with Connect Four
 and has a shared theme manager, local scores, save/resume support, and a
-service worker for offline launches. More games can be added to the registry
+service worker for offline launches. Connect Four keeps persistent wins,
+losses, draws, and games played. More games can be added to the registry
 in `app.js`.
 
 To play, serve this folder over HTTPS (or use a local development server) and
